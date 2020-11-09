@@ -1,0 +1,28 @@
+UpdateSNW
+From PNSNWikiDocs
+
+Automatic update the SeisNetWatch stations_info.ini file
+
+Usage: updateSNW (no arguments)
+
+Uses the Python-3 script, aqms_snw.py (by: /app/rtem/metadata-venv/bin/python, ~rtem/snwconfig/groups.static and ~rtem/snwconfig/stations.static
+
+Any time one wants to update the configurations for SeisNetWatch this procedure should be run on the parchdb machine as user, rtem from any directory. It uses Python-3 which is called for in the python script so it should NOT be necessary to use the command, md for setting the python environment.
+
+It replaces the ~seis/snw/conf/stations_info.ini file on pnsndocs. It uses the "active" channels from AQMS sarchdb to determine what stations should be working. It uses the channel names and their logos defined in the waveserver configs on ewserver1 to determine groups associated with the stations' import machines. If the first character of a station name is 'Q' then it makes a NetQuakes group. It uses the defaultRuleSet for all stations other than NetQuakes which uses the NetQuakesRuleSet.
+
+Groups not available via the logo technique can be set manually in the file, ~rtem/snwconfig/groups.static, which consists of pairs of station names and group names.
+
+Pseudo-stations such as those associated with system and/or earthworm processes are defined in the, ~rtem/snwconfig/stations.static file, which is appended to the stations_info.ini file before it is transfered to pnsndocs.
+
+This script run as rtem needs to have access (either passwordless or by giving the password each time it is run) to access ewserver1 as user, eworm and to access pnsndocs as user, seis.
+
+As it runs it will give some statistics about number of channels and stations found and will also list those stations for which it finds no match in the group file; probably because these stations are not listed in the waveservers on ewserver1.
+
+It keeps a backup copy of the generated ~seis/snw/conf/stations_info.ini file in ~rtem/snwconf with a suffix of the current date.
+
+Note that there is now a snwRinky script on pnsndocs as user, seis that will fix any problems with a station whose channels have changed and confused SNW as to what it should be seeing. Use this script rather than doing a rinky-dink by hand.
+
+Retrieved from "https://pnsndocs.ess.washington.edu/LOCAL/WikiDocs/index.php?title=UpdateSNW&oldid=57434"
+This page was last modified on 8 November 2020, at 14:18.
+This page has been accessed 43 times.

@@ -1,0 +1,43 @@
+#!/bin/bash
+# Script that will update the configuration file, stations_info.ini for SNW on pnsndocs
+# It uses the "active" channels from AQMS sarchdb to determine what should be working
+# It uses the channel names and the logo defined in the waveserver configs on ewserver1
+# to determine some of the groups.  If the first character of station name is 'Q' then
+# It makes a NetQuakes group.  It uses the defaultRuleSet for all stations other than
+# netquakes which uses the NetQuakesRuleSet.
+
+# It should be run under the Python-3 environment and needs access to the sarchdb
+# and ewserver1 as eworm and pnsndocs as seis.
+
+# Static group definitions should be placed in a file called /app/rtem/snwconfig/groups.static
+
+echo If prompted you will need to give appropriate passwords.
+sleep 2
+echo ''
+
+# First get the logos from waveservers on ewserver1 and reformat them in station - group pairs
+# And append the groups.static file that generates groups.txt for all defined pairs.
+ssh eworm@ewserver1 "grep -h '^Tank ' run/params/wave_serverV_[1-9].d" | awk '/[HN]Z /{print $2,$8}'\
+ | sort -u | sed -e 's/MOD_/"/' -e 's/$/"/' -e 's/WILDCARD/IMPORT01/' > groups.txt
+cat /app/rtem/snwconfig/groups.static >>groups.txt
+
+# Run the Python script, aqms_snw.py to generate a new stations_info.ini file
+# from sarchdb of active channels.
+aqms_snw.py
+echo ''
+echo  Above list of Missing Group stations is probably because they are NOT being saved on ewserver1
+
+# Append the stations.static file to the ini file to include system level monitoring
+cat /app/rtem/snwconfig/stations.static >> stations_info.ini
+
+# copy the stations_info.ini to seis@pnsndocs:snw/conf
+scp stations_info.ini seis@pnsndocs:snw/conf
+
+# Save the generated .ini file in  /app/rtem/snwconfig with today's date suffix.
+now=`date +%Y%m%d`
+cp stations_info.ini /app/rtem/snwconfig/stations_info.ini.$now
+#ssh seis@pnsndocs cp snw/conf/stations_info.ini snw/conf/OLD/stations_info.ini.$now
+
+echo ''
+echo Remember to check SNW to see if it is still working and anything new has been added.
+echo If suspecting a problem tail the file pnsndocs:snw/log/NSI_console.txt for hints of the problem.

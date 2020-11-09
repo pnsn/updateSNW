@@ -1,0 +1,85 @@
+
+[PROC-PP1]
+group=Processing
+longname="PostProcessing system on host pp1"
+ruleSet="RTruleset"
+"Station Latitude"=0.0
+"Station Longitude"=0.0
+"Station Elevation"=0.0
+
+[PROC-PP2]
+group=Processing
+longname="PostProcessing system on host pp2"
+ruleSet="RTruleset"
+"Station Latitude"=0.0
+"Station Longitude"=0.0
+"Station Elevation"=0.0
+
+[RTEM-RT1]
+group=Processing
+group= "RT-SIS"
+longname="RT system on host rt1"
+ruleSet="RTruleset"
+"Station Latitude"=0.0
+"Station Longitude"=0.0
+"Station Elevation"=0.0
+
+[RTEM-RT2]
+group=Processing
+group= "RT-BRO"
+longname="RT system on host rt2"
+ruleSet="RTruleset"
+"Station Latitude"=0.0
+"Station Longitude"=0.0
+"Station Elevation"=0.0
+
+[EW-rt1]
+group=Processing
+group= "RT-rt1"
+longname="Earthworm system on host rt1"
+ruleSet="EWruleset"
+"Station Latitude"=0.0
+"Station Longitude"=0.0
+"Station Elevation"=0.0
+
+[EW-rt2]
+group=Processing
+group= "RT-rt2"
+longname="Earthworm system on host rt2"
+ruleSet="EWruleset"
+"Station Latitude"=0.0
+"Station Longitude"=0.0
+"Station Elevation"=0.0
+
+[SYS-rt1]
+group=Processing
+longname="processing host rt1"
+ruleSet="SYSruleset"
+"Station Latitude"=0.0
+"Station Longitude"=0.0
+"Station Elevation"=0.0
+
+[SYS-rt2]
+group=Processing
+longname="processing host rt2"
+ruleSet="SYSruleset"
+"Station Latitude"=0.0
+"Station Longitude"=0.0
+"Station Elevation"=0.0
+
+[SYS-pp1]
+group=Processing
+longname="processing host pp1"
+ruleSet="SYSruleset"
+"Station Latitude"=0.0
+"Station Longitude"=0.0
+"Station Elevation"=0.0
+
+[SYS-pp2]
+group=Processing
+longname="processing host pp2"
+ruleSet="SYSruleset"
+"Station Latitude"=0.0
+"Station Longitude"=0.0
+"Station Elevation"=0.0
+
