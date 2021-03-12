@@ -31,14 +31,19 @@ aqsdbtype='postgresql'
 connection=psycopg2.connect(aqscat)
 
 # SQL that gets all current active station including without instruments being defined.
-getstr="select c.net,c.sta,c.lat,c.lon,c.elev,c.seedchan,c.ondate,s.staname,coalesce(d.description,'UNKNOWN') \
+getstr1="select c.net,c.sta,c.lat,c.lon,c.elev,c.seedchan,c.ondate,s.staname,coalesce(d.description,'UNKNOWN') \
 FROM jasi_station_view s left outer join channel_data c on c.net = s.net and c.sta = s.sta left outer join d_abbreviation d on c.inid = d.id \
-WHERE c.offdate > CURRENT_TIMESTAMP order by c.sta;"
+WHERE c.offdate > CURRENT_TIMESTAMP AND c.flags != 'TG' AND c.net != 'NN' order by c.sta;"
+getstr2="select c.net,c.sta,c.lat,c.lon,c.elev,c.seedchan,c.ondate,s.staname,coalesce(d.description,'UNKNOWN') \
+FROM jasi_station_view s left outer join channel_data c on c.net = s.net and c.sta = s.sta left outer join d_abbreviation d on c.inid = d.id \
+WHERE c.offdate > CURRENT_TIMESTAMP AND c.net ='UW' and c.flags='TG' order by c.sta;"
 
 # Database access commands
 curs=connection.cursor()
-curs.execute(getstr)
+curs.execute(getstr1)
 ret=curs.fetchall()
+curs.execute(getstr2)
+ret += curs.fetchall()
 curs.close()
 print("Number of channels found: ", len(ret))
 
@@ -61,6 +66,7 @@ oldsta=''
 oldchan=''
 nsta=0
 for (net, sta, lat, lon, elv, chan, start, longname, inst) in ret:
+   #print(net, sta, chan, inst)
    if 'Z' not in chan :
       continue
    if oldsta != sta:
